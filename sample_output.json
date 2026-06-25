@@ -1,0 +1,524 @@
+{
+  "job": {
+    "job_id": "2e3a020f-ed63-480b-aa0e-df32cbf6f0d3",
+    "status": "completed",
+    "total": 5,
+    "processed": 5,
+    "success_count": 5,
+    "partial_count": 0,
+    "failed_count": 0,
+    "created_at": "2026-06-25T11:18:50.448214+00:00",
+    "completed_at": "2026-06-25T11:19:02.999798+00:00",
+    "error": null
+  },
+  "warnings": [
+    "Removed 16 duplicate product IDs."
+  ],
+  "results": [
+    {
+      "product_id": "35512522",
+      "status": "success",
+      "product": {
+        "product_id": "35512522",
+        "title": "EcoRight Eve Women Textured Crossbody Shoulder Bag",
+        "description": "Coffee brown textured sling bag 1 main compartment, has a zip closure, 2 inner pockets With a detachable sling strap Warranty: 6 months Warranty provided by brand owner/manufacturer",
+        "images": [
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2026/MAY/22/G5yVblSp_6d1ef586301d42a4a584d6fa70b0c43e.jpg",
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2026/MAY/22/RdboSTD5_b067382fcb634d1582552d2103d462ca.jpg"
+        ],
+        "rating": 4.536144578313253,
+        "rating_count": 166,
+        "category": "Accessories > Bags > Handbags",
+        "category_slug": "handbags",
+        "product_url": "https://www.myntra.com/35512522",
+        "category_url": "https://www.myntra.com/handbags"
+      },
+      "category_ads": [
+        {
+          "product_id": "23102450",
+          "title": "MIRAGGIO Freya Black Shoulder Bag",
+          "price": 2199,
+          "mrp": 2999,
+          "rating": 4.758953094482422,
+          "rating_count": 2178,
+          "image": "https://assets.myntassets.com/assets/images/23102450/2025/5/5/5642df5a-d432-4789-bfc8-40ec15a968191746459908506-MIRAGGIO-Freya-Black-Shoulder-Bag-7091746459908015-1.jpg",
+          "product_url": "https://www.myntra.com/Handbags/MIRAGGIO/MIRAGGIO-Freya-Black-Shoulder-Bag/23102450/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "42404480",
+          "title": "ZOUK Bowling Handheld Bag with Cut Work",
+          "price": 1099,
+          "mrp": 1427,
+          "rating": null,
+          "rating_count": null,
+          "image": "https://assets.myntassets.com/assets/images/2026/MAY/21/wrnxUCfe_8227377bb4de45aebc04e8fedad73753.jpg",
+          "product_url": "https://www.myntra.com/Handbags/ZOUK/ZOUK-Bowling-Handheld-Bag-with-Cut-Work/42404480/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "29944661",
+          "title": "IRTH by House of Titan  Structured Sling Bag",
+          "price": 2157,
+          "mrp": 3595,
+          "rating": 4.573529243469238,
+          "rating_count": 68,
+          "image": "https://assets.myntassets.com/assets/images/29944661/2024/7/25/8e2a7f58-9500-439b-87c2-57be54d333ad1721898714458EmiliaSling-Oatmilk7.jpg",
+          "product_url": "https://www.myntra.com/Handbags/IRTH+by+House+of+Titan/IRTH-by-House-of-Titan--Structured-Sling-Bag/29944661/buy",
+          "is_sponsored": true
+        }
+      ],
+      "delivery": [
+        {
+          "city": "Mumbai",
+          "pincode": "400072",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Bangalore",
+          "pincode": "560001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Delhi",
+          "pincode": "110006",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Ahmedabad",
+          "pincode": "380054",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Kolkata",
+          "pincode": "700001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "meta": {
+        "fetched_at": "2026-06-25T11:18:50.448347+00:00",
+        "category_slug_used": "handbags"
+      }
+    },
+    {
+      "product_id": "31786093",
+      "status": "success",
+      "product": {
+        "product_id": "31786093",
+        "title": "SUPERVEK Unisex Solid Pure Cotton Bucket Hat with Embroidered Detail",
+        "description": "Black solid bucket hat with thunder bolt embroidered detail",
+        "images": [
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/31786093/2025/5/20/50e8959d-2c4d-47ea-b70b-9fd6e07c9aec1747741025365-SUPERVEK-Unisex-Solid-Pure-Cotton-Bucket-Hat-with-Embroidere-1.jpg",
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/31786093/2025/5/20/5aa05680-4cf2-4aa2-a18a-8dfe35eb8dec1747741025335-SUPERVEK-Unisex-Solid-Pure-Cotton-Bucket-Hat-with-Embroidere-2.jpg"
+        ],
+        "rating": 4.082191780821918,
+        "rating_count": 73,
+        "category": "Accessories > Headwear > Hat",
+        "category_slug": "hat",
+        "product_url": "https://www.myntra.com/31786093",
+        "category_url": "https://www.myntra.com/hat"
+      },
+      "category_ads": [
+        {
+          "product_id": "32359353",
+          "title": "Chicco Girls White Solid Sun Hat",
+          "price": 1039,
+          "mrp": 1299,
+          "rating": null,
+          "rating_count": null,
+          "image": "https://assets.myntassets.com/assets/images/2025/JANUARY/16/Lc8x5FSx_b7272da8caeb489593a56bea27dadb19.jpg",
+          "product_url": "https://www.myntra.com/Hat/Chicco/Chicco-Girls-White-Solid-Sun-Hat/32359353/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "21684064",
+          "title": "ToniQ Beige Straw Sun Visor Summer vacation Beach Hats for Women",
+          "price": 1000,
+          "mrp": 2499,
+          "rating": 4.44818639755249,
+          "rating_count": 772,
+          "image": "https://assets.myntassets.com/assets/images/2026/JANUARY/17/ji33Gs0A_00cf039aac4644de891cf49803ad3979.jpg",
+          "product_url": "https://www.myntra.com/Hat/ToniQ/ToniQ-Beige-Straw-Sun-Visor-Summer-vacation-Beach-Hats-for-Women/21684064/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "34164483",
+          "title": "HAIR DRAMA CO. Women Handmade Crochet Summer Floppy Knit Bucket Hat",
+          "price": 774,
+          "mrp": 950,
+          "rating": 3.965217351913452,
+          "rating_count": 115,
+          "image": "https://assets.myntassets.com/assets/images/34164483/2025/7/18/52ca77c8-6f2e-4880-aa7f-d884cbbea2441752845730260-HAIR-DRAMA-CO-Women-Black-Self-Design-Bucket-Hat-75717528457-1.jpg",
+          "product_url": "https://www.myntra.com/Hat/HAIR+DRAMA+CO./HAIR-DRAMA-CO-Women-Handmade-Crochet-Summer-Floppy-Knit-Bucket-Hat-/34164483/buy",
+          "is_sponsored": true
+        }
+      ],
+      "delivery": [
+        {
+          "city": "Mumbai",
+          "pincode": "400072",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Bangalore",
+          "pincode": "560001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Delhi",
+          "pincode": "110006",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Ahmedabad",
+          "pincode": "380054",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Kolkata",
+          "pincode": "700001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "meta": {
+        "fetched_at": "2026-06-25T11:18:52.897695+00:00",
+        "category_slug_used": "hat"
+      }
+    },
+    {
+      "product_id": "37403577",
+      "status": "success",
+      "product": {
+        "product_id": "37403577",
+        "title": "EcoRight Women Pack of 2 Mooving Hearts Printed Ankle Length Socks",
+        "description": "Pack Of 2 socks A pair of pink printed ankle length socks, each has a ribbed mouth and flat toe seam A pair of black printed ankle length socks, each has a ribbed mouth and flat toe seam",
+        "images": [
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2026/MAY/25/dDrrHuZb_8a27f330c7ab4a12a76f676c071608d4.jpg",
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2026/MAY/25/AizBL7Po_21c15e8afc6f4373ab1b5130697b21e8.jpg"
+        ],
+        "rating": 4.571428571428571,
+        "rating_count": 7,
+        "category": "Accessories > Socks > Socks",
+        "category_slug": "socks",
+        "product_url": "https://www.myntra.com/37403577",
+        "category_url": "https://www.myntra.com/socks"
+      },
+      "category_ads": [
+        {
+          "product_id": "40317122",
+          "title": "XYXX Men Pack of 3 Cotton Assorted Patterned Above Ankle Socks",
+          "price": 399,
+          "mrp": 657,
+          "rating": 4.882352828979492,
+          "rating_count": 17,
+          "image": "https://assets.myntassets.com/assets/images/2026/FEBRUARY/25/PUNYIKGG_e57824fbba274264a3d219d7fab60dc4.jpg",
+          "product_url": "https://www.myntra.com/Socks/XYXX/XYXX-Men-Pack-of-3-Cotton-Assorted-Patterned-Above-Ankle-Socks/40317122/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "13780238",
+          "title": "Supersox Men Pack of 3 Black Solid Calf-Length Formal Socks",
+          "price": 347,
+          "mrp": 599,
+          "rating": 4.366891860961914,
+          "rating_count": 1480,
+          "image": "https://assets.myntassets.com/assets/images/2026/JUNE/25/g798N5qo_e0e52f86648547789f7b44b3bf3f22a9.jpg",
+          "product_url": "https://www.myntra.com/Socks/Supersox/Supersox-Men-Pack-of-3-Black-Solid-Calf-Length-Formal-Socks/13780238/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "28547200",
+          "title": "Supersox Women Pack of 5 Ankle Length Cotton Socks",
+          "price": 389,
+          "mrp": 599,
+          "rating": 4.6169843673706055,
+          "rating_count": 577,
+          "image": "https://assets.myntassets.com/assets/images/2026/JUNE/12/SsKhupd8_5d5c61a66a104d20bc731981e8567803.jpg",
+          "product_url": "https://www.myntra.com/Socks/Supersox/Supersox-Women-Pack-of-5-Ankle-Length-Cotton-Socks-/28547200/buy",
+          "is_sponsored": true
+        }
+      ],
+      "delivery": [
+        {
+          "city": "Mumbai",
+          "pincode": "400072",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Bangalore",
+          "pincode": "560001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Delhi",
+          "pincode": "110006",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Ahmedabad",
+          "pincode": "380054",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Kolkata",
+          "pincode": "700001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "meta": {
+        "fetched_at": "2026-06-25T11:18:55.415999+00:00",
+        "category_slug_used": "socks"
+      }
+    },
+    {
+      "product_id": "27356632",
+      "status": "success",
+      "product": {
+        "product_id": "27356632",
+        "title": "SUPERVEK Unisex Travel Cross Body Sling Bag",
+        "description": "Black Solid Messenger BagWater-Resistant Fabric.1 Main CompartmentInner Zip Pocket1 Front Molle Webbing&nbsp;Comes with A Detachable On-The-Fly Adjustable Strap&nbsp;",
+        "images": [
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2025/DECEMBER/1/sz8w39dv_202f170cd20c484e95da58865da82f68.jpg",
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2025/DECEMBER/1/Wq0zyZft_653741e316a747278ddaa19988c898c1.jpg"
+        ],
+        "rating": 4.38903743315508,
+        "rating_count": 1496,
+        "category": "Accessories > Bags > Messenger Bag",
+        "category_slug": "messenger-bag",
+        "product_url": "https://www.myntra.com/27356632",
+        "category_url": "https://www.myntra.com/messenger-bag"
+      },
+      "category_ads": [
+        {
+          "product_id": "28327370",
+          "title": "Police Men Colourblocked Leather Messenger Bag",
+          "price": 1449,
+          "mrp": 3999,
+          "rating": 4.411764621734619,
+          "rating_count": 85,
+          "image": "https://assets.myntassets.com/assets/images/2026/JUNE/10/Iozbpnni_0a3f6348a17c4c84b38fe2b9f8c6f517.jpg",
+          "product_url": "https://www.myntra.com/Messenger-Bag/Police/Police-Men-Colourblocked-Leather-Messenger-Bag/28327370/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "35949906",
+          "title": "MOKOBARA Unisex The Aisle Crossbody Aerology Nylon Fabric Casual & Travel",
+          "price": 1699,
+          "mrp": 2499,
+          "rating": 4.6315789222717285,
+          "rating_count": 19,
+          "image": "https://assets.myntassets.com/assets/images/2025/JULY/25/Is5LQ2wo_e74588426e5f42129a7b98b6769307d3.jpg",
+          "product_url": "https://www.myntra.com/Messenger-Bag/MOKOBARA/MOKOBARA-Unisex-The-Aisle-Crossbody-Aerology-Nylon-Fabric-Casual--Travel/35949906/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "42691708",
+          "title": "Police Men Messenger Bag",
+          "price": 1549,
+          "mrp": 3999,
+          "rating": null,
+          "rating_count": null,
+          "image": "https://assets.myntassets.com/assets/images/2026/MAY/30/Mj67DqVA_fb42845586654c54a1027456dd4eebee.jpg",
+          "product_url": "https://www.myntra.com/Messenger-Bag/Police/Police-Men-Messenger-Bag/42691708/buy",
+          "is_sponsored": true
+        }
+      ],
+      "delivery": [
+        {
+          "city": "Mumbai",
+          "pincode": "400072",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Bangalore",
+          "pincode": "560001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Delhi",
+          "pincode": "110006",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Ahmedabad",
+          "pincode": "380054",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Kolkata",
+          "pincode": "700001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "meta": {
+        "fetched_at": "2026-06-25T11:18:57.956823+00:00",
+        "category_slug_used": "messenger-bag"
+      }
+    },
+    {
+      "product_id": "40802669",
+      "status": "success",
+      "product": {
+        "product_id": "40802669",
+        "title": "MR BUTTON Men Printed Boxy T-shirt",
+        "description": "Pink Tshirt for Men Solid Printed Regular length Round Neck Short, Knitted and Woven Cotton fabric",
+        "images": [
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2026/MARCH/27/BOrUZ0IA_a612433cc7964db386ec9ae59d78f6e7.jpg",
+          "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/2026/MARCH/27/6ktjeEn9_fd2a783c93d44dfd9b3e9e9e761b9cc4.jpg"
+        ],
+        "rating": 0.0,
+        "rating_count": 0,
+        "category": "Apparel > Topwear > Tshirts",
+        "category_slug": "tshirts",
+        "product_url": "https://www.myntra.com/40802669",
+        "category_url": "https://www.myntra.com/tshirts"
+      },
+      "category_ads": [
+        {
+          "product_id": "42552360",
+          "title": "Nap Chief Kids DC Comics Batman Logo Printed Round Neck T-shirt",
+          "price": 390,
+          "mrp": 1450,
+          "rating": 4.539596080780029,
+          "rating_count": 1288,
+          "image": "https://assets.myntassets.com/assets/images/2026/MAY/27/FDfzp2tX_cf6f7fad7d36499d873c4dd955926889.jpg",
+          "product_url": "https://www.myntra.com/Tshirts/Nap+Chief/Nap-Chief-Kids-DC-Comics-Batman-Logo-Printed-Round-Neck-T-shirt/42552360/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "19339918",
+          "title": "Bewakoof Men White Printed Pure Cotton Applique T-shirt",
+          "price": 499,
+          "mrp": 999,
+          "rating": 4.393617153167725,
+          "rating_count": 94,
+          "image": "https://assets.myntassets.com/assets/images/2025/OCTOBER/29/ObvNkBRB_6e6c9e0ec55b46bcb5952783307d3d34.jpg",
+          "product_url": "https://www.myntra.com/Tshirts/Bewakoof/Bewakoof-Men-White-Printed-Pure-Cotton-Applique-T-shirt/19339918/buy",
+          "is_sponsored": true
+        },
+        {
+          "product_id": "41951775",
+          "title": "The Roadster Lifestyle Co Cotton Polo Collar Tshirts",
+          "price": 549,
+          "mrp": 1499,
+          "rating": null,
+          "rating_count": null,
+          "image": "https://assets.myntassets.com/assets/images/2026/MAY/9/UIJaOgEt_26fd66f7efa64d468cc0376dde25d531.jpg",
+          "product_url": "https://www.myntra.com/Tshirts/Roadster/The-Roadster-Lifestyle-Co-Cotton-Polo-Collar-Tshirts/41951775/buy",
+          "is_sponsored": true
+        }
+      ],
+      "delivery": [
+        {
+          "city": "Mumbai",
+          "pincode": "400072",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Bangalore",
+          "pincode": "560001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Delhi",
+          "pincode": "110006",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Ahmedabad",
+          "pincode": "380054",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        },
+        {
+          "city": "Kolkata",
+          "pincode": "700001",
+          "serviceable": true,
+          "delivery_text": "Serviceable",
+          "estimated_days": null,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "meta": {
+        "fetched_at": "2026-06-25T11:19:00.371446+00:00",
+        "category_slug_used": "tshirts"
+      }
+    }
+  ]
+}
