@@ -1,0 +1,9 @@
+services:
+  myntra-fetcher:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENABLE_DELIVERY_CHECK=true
+      - REQUEST_DELAY_SECONDS=0.8
+      - MAX_CONCURRENT_REQUESTS=3
