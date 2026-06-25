@@ -2,6 +2,8 @@
 
 A production-oriented tool that reads a CSV of Myntra `product_id` values, fetches public product page data, returns sponsored category ads, and optionally checks delivery for major Indian cities.
 
+For system design, data flows, and component responsibilities, see [architecture.md](architecture.md).
+
 ## Features
 
 - CSV upload with `product_id` column
@@ -161,7 +163,10 @@ With more time, I would add:
 
 ## Project structure
 
+See [architecture.md](architecture.md) for a detailed breakdown of layers, request flows, and extension points.
+
 ```text
+architecture.md
 app/
   api/v1/endpoints/jobs.py
   core/config.py
