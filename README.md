@@ -1,2 +1,2 @@
 # Myntra-Fetcher
-Demo For Educations And Learning Purpose Only
+For Demo, Educations And Learning Purpose Only
