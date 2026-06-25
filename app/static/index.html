@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Myntra Fetcher</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Myntra Fetcher</h1>
+      <p>Upload a CSV of Myntra product IDs and fetch structured product data, category ads, and delivery estimates.</p>
+    </header>
+
+    <section class="card upload-card">
+      <form id="upload-form">
+        <label class="file-label" for="csv-file">
+          <span id="file-label-text">Choose CSV file</span>
+          <input id="csv-file" type="file" accept=".csv" required />
+        </label>
+        <button id="submit-btn" type="submit">Start Fetch</button>
+      </form>
+      <p class="hint">CSV must include a <code>product_id</code> column.</p>
+    </section>
+
+    <section id="status-panel" class="card hidden">
+      <div class="status-row">
+        <strong>Job status:</strong>
+        <span id="job-status">-</span>
+      </div>
+      <div class="progress-wrap">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <p id="progress-text" class="progress-text">0 / 0 processed</p>
+      <div class="summary-grid">
+        <div><span>Success</span><strong id="success-count">0</strong></div>
+        <div><span>Partial</span><strong id="partial-count">0</strong></div>
+        <div><span>Failed</span><strong id="failed-count">0</strong></div>
+      </div>
+      <button id="download-btn" class="secondary hidden" type="button">Download JSON</button>
+    </section>
+
+    <section class="card history-card">
+      <div class="table-header">
+        <h2>Saved runs</h2>
+        <button id="refresh-history-btn" class="secondary small-btn" type="button">Refresh</button>
+      </div>
+      <p class="hint">Previously completed fetches are saved locally. Select one to view results without re-uploading.</p>
+      <div id="history-list" class="history-list">
+        <p class="empty-state">No saved runs yet.</p>
+      </div>
+    </section>
+
+    <section id="warnings" class="warnings hidden"></section>
+
+    <section class="card">
+      <div class="table-header">
+        <h2>Results</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Product ID</th>
+              <th>Status</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Rating</th>
+              <th>Ads</th>
+              <th>Delivery</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="results-body">
+            <tr><td colspan="8" class="empty">Upload a CSV to begin.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
