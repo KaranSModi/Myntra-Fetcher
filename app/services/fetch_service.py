@@ -64,6 +64,8 @@ class FetchService:
             return
 
         job.status = JobStatus.RUNNING
+        job.phase = "initial"
+        job.error = None
         job_store.update(job)
 
         category_cache: dict[str, list[dict[str, Any]]] = {}
@@ -91,7 +93,83 @@ class FetchService:
             job.error = str(exc)
             job.completed_at = datetime.now(timezone.utc)
         finally:
+            job.phase = None
+            self._clear_retry_progress(job)
             job_store.update(job)
+
+    async def retry_failed_products(self, job_id: str, *, include_partial: bool = True) -> None:
+        """Re-fetch products that failed or were partial in a completed job."""
+        job = job_store.get(job_id)
+        if not job:
+            return
+
+        retriable_ids = self._retriable_product_ids(job, include_partial=include_partial)
+        if not retriable_ids:
+            return
+
+        job.status = JobStatus.RUNNING
+        job.phase = "retry"
+        job.error = None
+        job.retry_total = len(retriable_ids)
+        job.retry_processed = 0
+        job.retry_current_product_id = None
+        job_store.update(job)
+
+        category_cache: dict[str, list[dict[str, Any]]] = {}
+        result_index = {result.product_id: index for index, result in enumerate(job.results)}
+
+        try:
+            for product_id in retriable_ids:
+                job.retry_current_product_id = product_id
+                job_store.update(job)
+
+                new_result = await self._fetch_single_product(product_id, category_cache)
+                job.results[result_index[product_id]] = new_result
+                job.retry_processed += 1
+                job_store.update(job)
+
+            self._recalculate_counts(job)
+            job.status = JobStatus.COMPLETED
+            job.completed_at = datetime.now(timezone.utc)
+        except Exception as exc:
+            logger.exception("Retry for job %s failed unexpectedly", job_id)
+            job.status = JobStatus.FAILED
+            job.error = str(exc)
+            job.completed_at = datetime.now(timezone.utc)
+        finally:
+            job.phase = None
+            self._clear_retry_progress(job)
+            job_store.update(job)
+
+    def count_retriable_products(self, job: JobRecord, *, include_partial: bool = True) -> int:
+        """Return how many products would be retried for a job."""
+        return len(self._retriable_product_ids(job, include_partial=include_partial))
+
+    def _retriable_product_ids(self, job: JobRecord, *, include_partial: bool) -> list[str]:
+        ids: list[str] = []
+        for result in job.results:
+            if result.status == ProductResultStatus.FAILED:
+                ids.append(result.product_id)
+            elif include_partial and result.status == ProductResultStatus.PARTIAL:
+                ids.append(result.product_id)
+        return ids
+
+    def _clear_retry_progress(self, job: JobRecord) -> None:
+        job.retry_total = 0
+        job.retry_processed = 0
+        job.retry_current_product_id = None
+
+    def _recalculate_counts(self, job: JobRecord) -> None:
+        job.success_count = 0
+        job.partial_count = 0
+        job.failed_count = 0
+        for result in job.results:
+            if result.status == ProductResultStatus.SUCCESS:
+                job.success_count += 1
+            elif result.status == ProductResultStatus.PARTIAL:
+                job.partial_count += 1
+            else:
+                job.failed_count += 1
 
     async def _fetch_single_product(
         self,

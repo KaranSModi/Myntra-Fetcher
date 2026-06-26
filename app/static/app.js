@@ -4,14 +4,23 @@ const fileLabelText = document.getElementById("file-label-text");
 const submitBtn = document.getElementById("submit-btn");
 const statusPanel = document.getElementById("status-panel");
 const jobStatus = document.getElementById("job-status");
+const jobPhaseBadge = document.getElementById("job-phase-badge");
+const jobErrorBanner = document.getElementById("job-error-banner");
+const fetchProgressPanel = document.getElementById("fetch-progress-panel");
 const progressBar = document.getElementById("progress-bar");
 const progressText = document.getElementById("progress-text");
+const retryProgressPanel = document.getElementById("retry-progress-panel");
+const retryProgressBar = document.getElementById("retry-progress-bar");
+const retryProgressText = document.getElementById("retry-progress-text");
+const retryCurrentProduct = document.getElementById("retry-current-product");
 const successCount = document.getElementById("success-count");
 const partialCount = document.getElementById("partial-count");
 const failedCount = document.getElementById("failed-count");
 const downloadBtn = document.getElementById("download-btn");
+const retryFailedBtn = document.getElementById("retry-failed-btn");
 const warningsBox = document.getElementById("warnings");
 const resultsBody = document.getElementById("results-body");
+const resultsFilterCount = document.getElementById("results-filter-count");
 const historyList = document.getElementById("history-list");
 const refreshHistoryBtn = document.getElementById("refresh-history-btn");
 
@@ -20,9 +29,20 @@ const LAST_JOB_KEY = "myntra_fetcher_last_job_id";
 let currentJobId = null;
 let pollTimer = null;
 let cachedResults = [];
+let cachedJob = null;
+let currentFilter = "all";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadHistory();
+
+  document.querySelectorAll(".filter-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      currentFilter = button.dataset.filter;
+      renderResults(cachedResults, cachedJob);
+    });
+  });
 
   const urlJobId = new URLSearchParams(window.location.search).get("job");
   const savedJobId = localStorage.getItem(LAST_JOB_KEY);
@@ -81,6 +101,30 @@ form.addEventListener("submit", async (event) => {
 downloadBtn.addEventListener("click", () => {
   if (!currentJobId) return;
   window.location.href = `/api/v1/jobs/${currentJobId}/download`;
+});
+
+retryFailedBtn.addEventListener("click", async () => {
+  if (!currentJobId) return;
+
+  retryFailedBtn.disabled = true;
+  try {
+    const response = await fetch(
+      `/api/v1/jobs/${currentJobId}/retry-failed?include_partial=true`,
+      { method: "POST" }
+    );
+    const payload = await response.json();
+    if (!response.ok) {
+      throw new Error(payload.detail || "Failed to start retry.");
+    }
+
+    downloadBtn.classList.add("hidden");
+    retryFailedBtn.classList.add("hidden");
+    submitBtn.disabled = true;
+    startPolling();
+  } catch (error) {
+    alert(error.message);
+    retryFailedBtn.disabled = false;
+  }
 });
 
 function startPolling() {
@@ -162,25 +206,21 @@ async function loadJob(jobId, { resumePolling = false } = {}) {
 
   const job = payload.data.job;
   const results = payload.data.results || [];
+  cachedJob = job;
   cachedResults = results;
 
   statusPanel.classList.remove("hidden");
   applyJobSummary(job);
-  renderResults(results);
+  renderResults(results, job);
+  updateActionButtons(job);
 
-  if (job.status === "completed") {
-    submitBtn.disabled = false;
-    downloadBtn.classList.remove("hidden");
-  } else if (job.status === "failed") {
-    submitBtn.disabled = false;
-    downloadBtn.classList.add("hidden");
-  } else if (resumePolling) {
+  if (job.status === "running" || job.status === "pending") {
     submitBtn.disabled = true;
-    downloadBtn.classList.add("hidden");
-    startPolling();
+    if (resumePolling) {
+      startPolling();
+    }
   } else {
     submitBtn.disabled = false;
-    downloadBtn.classList.add("hidden");
   }
 }
 
@@ -192,13 +232,92 @@ function rememberJob(jobId) {
 }
 
 function applyJobSummary(job) {
-  jobStatus.textContent = job.status;
-  const percent = job.total ? Math.round((job.processed / job.total) * 100) : 0;
-  progressBar.style.width = `${percent}%`;
-  progressText.textContent = `${job.processed} / ${job.total} processed`;
+  cachedJob = job;
+  const isRunning = job.status === "running" || job.status === "pending";
+  const isRetry = job.phase === "retry" && isRunning;
+  const isInitial = job.phase === "initial" && isRunning;
+
+  jobStatus.textContent = isRetry ? "retrying" : job.status;
+
+  if (isRetry) {
+    jobPhaseBadge.textContent = "Retry pass";
+    jobPhaseBadge.className = "job-phase-badge job-phase-badge--retry";
+    jobPhaseBadge.classList.remove("hidden");
+  } else if (isInitial) {
+    jobPhaseBadge.textContent = "Initial fetch";
+    jobPhaseBadge.className = "job-phase-badge job-phase-badge--fetch";
+    jobPhaseBadge.classList.remove("hidden");
+  } else {
+    jobPhaseBadge.classList.add("hidden");
+  }
+
+  if (job.error) {
+    jobErrorBanner.textContent = job.error;
+    jobErrorBanner.classList.remove("hidden");
+  } else {
+    jobErrorBanner.classList.add("hidden");
+    jobErrorBanner.textContent = "";
+  }
+
+  if (isRetry) {
+    fetchProgressPanel.classList.add("muted-progress");
+    const fetchPercent = job.total ? Math.round((job.processed / job.total) * 100) : 0;
+    progressBar.style.width = `${fetchPercent}%`;
+    progressText.textContent = `Initial fetch complete · ${job.processed} / ${job.total} products`;
+
+    retryProgressPanel.classList.remove("hidden");
+    const retryPercent = job.retry_total
+      ? Math.round((job.retry_processed / job.retry_total) * 100)
+      : 0;
+    retryProgressBar.style.width = `${retryPercent}%`;
+    retryProgressText.textContent = `${job.retry_processed} / ${job.retry_total} retried`;
+
+    if (job.retry_current_product_id) {
+      retryCurrentProduct.textContent = `Currently retrying product ${job.retry_current_product_id}…`;
+    } else if (job.retry_processed >= job.retry_total && job.retry_total > 0) {
+      retryCurrentProduct.textContent = "Finishing retry pass…";
+    } else {
+      retryCurrentProduct.textContent = "Preparing retry queue…";
+    }
+  } else {
+    fetchProgressPanel.classList.remove("muted-progress");
+    retryProgressPanel.classList.add("hidden");
+    retryCurrentProduct.textContent = "";
+
+    const percent = job.total ? Math.round((job.processed / job.total) * 100) : 0;
+    progressBar.style.width = `${percent}%`;
+    progressText.textContent = `${job.processed} / ${job.total} processed`;
+  }
+
   successCount.textContent = job.success_count;
   partialCount.textContent = job.partial_count;
   failedCount.textContent = job.failed_count;
+}
+
+function updateActionButtons(job) {
+  const retriable = (job.failed_count || 0) + (job.partial_count || 0);
+  const isRunning = job.status === "running" || job.status === "pending";
+
+  retryFailedBtn.disabled = false;
+
+  if (isRunning) {
+    downloadBtn.classList.add("hidden");
+    retryFailedBtn.classList.add("hidden");
+    return;
+  }
+
+  if (job.status === "completed" || job.status === "failed") {
+    downloadBtn.classList.remove("hidden");
+  } else {
+    downloadBtn.classList.add("hidden");
+  }
+
+  if (retriable > 0 && (job.status === "completed" || job.status === "failed")) {
+    retryFailedBtn.classList.remove("hidden");
+    retryFailedBtn.textContent = `Retry failed & partial (${retriable})`;
+  } else {
+    retryFailedBtn.classList.add("hidden");
+  }
 }
 
 async function pollJob() {
@@ -215,40 +334,70 @@ async function pollJob() {
 
   const job = payload.data.job;
   const results = payload.data.results || [];
+  cachedJob = job;
   cachedResults = results;
 
   applyJobSummary(job);
-  renderResults(results);
+  renderResults(results, job);
+  updateActionButtons(job);
 
   if (job.status === "completed" || job.status === "failed") {
     clearInterval(pollTimer);
     submitBtn.disabled = false;
     rememberJob(currentJobId);
     await loadHistory();
-    if (job.status === "completed") {
-      downloadBtn.classList.remove("hidden");
-    }
   }
 }
 
-function renderResults(results) {
+function renderResults(results, job = cachedJob) {
   if (!results.length) {
-    resultsBody.innerHTML = '<tr><td colspan="8" class="empty">Waiting for results...</td></tr>';
+    resultsBody.innerHTML = '<tr><td colspan="9" class="empty">Waiting for results...</td></tr>';
+    resultsFilterCount.textContent = "";
     return;
   }
 
-  resultsBody.innerHTML = results
-    .map((result, index) => {
+  const filtered = results
+    .map((result, index) => ({ result, index }))
+    .filter(({ result }) => matchesFilter(result, currentFilter));
+
+  resultsFilterCount.textContent =
+    currentFilter === "all"
+      ? `${results.length} products`
+      : `Showing ${filtered.length} of ${results.length}`;
+
+  if (!filtered.length) {
+    resultsBody.innerHTML = '<tr><td colspan="9" class="empty">No products match this filter.</td></tr>';
+    return;
+  }
+
+  const isRetryPhase = job?.phase === "retry" && job?.status === "running";
+  const retryingId = job?.retry_current_product_id;
+
+  resultsBody.innerHTML = filtered
+    .map(({ result, index }) => {
       const product = result.product || {};
       const rating =
         result.product?.rating != null
           ? `${Number(result.product.rating).toFixed(1)} (${result.product.rating_count ?? 0})`
           : "-";
       const deliverySummary = formatDeliverySummary(result.delivery);
+      const issueSummary = formatFailureSummary(result);
+      let rowClass = `result-row result-row--${result.status}`;
+      if (isRetryPhase && result.product_id === retryingId) {
+        rowClass += " result-row--retrying";
+      } else if (
+        isRetryPhase &&
+        (result.status === "failed" || result.status === "partial") &&
+        result.product_id !== retryingId
+      ) {
+        rowClass += " result-row--retry-queued";
+      }
+
       return `
-        <tr class="result-row" data-index="${index}">
+        <tr class="${rowClass}" data-index="${index}" data-product-id="${result.product_id}">
           <td>${result.product_id}</td>
           <td><span class="badge ${result.status}">${result.status}</span></td>
+          <td class="issue-cell">${issueSummary}</td>
           <td>${escapeHtml(product.title || "-")}</td>
           <td>${escapeHtml(product.category || "-")}</td>
           <td>${rating}</td>
@@ -259,7 +408,7 @@ function renderResults(results) {
           </td>
         </tr>
         <tr class="detail-row hidden" id="detail-row-${index}">
-          <td colspan="8">
+          <td colspan="9">
             <div class="detail-panel-wrap" id="detail-${index}"></div>
           </td>
         </tr>
@@ -324,10 +473,41 @@ function buildDetailPanel(result) {
   panel.appendChild(buildSponsoredAdsSection(result.category_ads));
 
   if (result.errors?.length) {
-    panel.appendChild(buildSection("Warnings", buildWarningsBlock(result.errors)));
+    const title = result.status === "failed" ? "Failure reasons" : "Issues & warnings";
+    panel.appendChild(buildSection(title, buildIssuesBlock(result)));
   }
 
   return panel;
+}
+
+function buildIssuesBlock(result) {
+  const wrap = document.createElement("div");
+  wrap.className = "issues-block";
+
+  const errors = result.errors || [];
+  if (!errors.length) {
+    wrap.innerHTML = '<p class="empty-state">No issue details recorded.</p>';
+    return wrap;
+  }
+
+  errors.forEach((error) => {
+    const item = document.createElement("div");
+    item.className = `issue-item issue-item--${classifyError(error)}`;
+
+    const label = document.createElement("span");
+    label.className = "issue-label";
+    label.textContent = errorTypeLabel(classifyError(error));
+
+    const message = document.createElement("p");
+    message.className = "issue-message";
+    message.textContent = error;
+
+    item.appendChild(label);
+    item.appendChild(message);
+    wrap.appendChild(item);
+  });
+
+  return wrap;
 }
 
 function buildProductStrip(product = {}) {
@@ -592,15 +772,68 @@ function buildDeliveryBlock(delivery = []) {
   return table;
 }
 
-function buildWarningsBlock(errors = []) {
-  const list = document.createElement("ul");
-  list.className = "warnings-list";
-  errors.forEach((error) => {
-    const item = document.createElement("li");
-    item.textContent = error;
-    list.appendChild(item);
-  });
-  return list;
+
+function matchesFilter(result, filter) {
+  if (filter === "all") return true;
+  if (filter === "failed") return result.status === "failed";
+  if (filter === "partial") return result.status === "partial";
+  if (filter === "issues") return result.status === "failed" || result.status === "partial";
+  return true;
+}
+
+function classifyError(message) {
+  const lower = String(message).toLowerCase();
+  if (lower.includes("blocked") || lower.includes("rate-limit")) return "blocked";
+  if (lower.includes("not found") || lower.includes("unavailable") || lower.includes("delisted")) {
+    return "not_found";
+  }
+  if (lower.includes("parse") || lower.includes("window.__myx")) return "parse";
+  if (lower.includes("delivery")) return "delivery";
+  if (lower.includes("category") || lower.includes("ads") || lower.includes("sponsored")) return "ads";
+  if (lower.includes("not available")) return "missing";
+  return "other";
+}
+
+function errorTypeLabel(type) {
+  const labels = {
+    blocked: "Rate limited",
+    not_found: "Not found",
+    parse: "Parse error",
+    delivery: "Delivery",
+    ads: "Category ads",
+    missing: "Missing data",
+    other: "Issue",
+  };
+  return labels[type] || "Issue";
+}
+
+function formatFailureSummary(result) {
+  const errors = result.errors || [];
+
+  if (result.status === "success" && !errors.length) {
+    return '<span class="issue-none">—</span>';
+  }
+
+  if (!errors.length) {
+    if (result.status === "failed") {
+      return '<span class="error-chip error-chip--other">Product fetch failed</span>';
+    }
+    return '<span class="issue-none muted">No details</span>';
+  }
+
+  const primary = errors[0];
+  const type = classifyError(primary);
+  const short = shortenText(primary, 80);
+  const more = errors.length > 1 ? ` <span class="issue-more">+${errors.length - 1}</span>` : "";
+  const title = escapeHtml(errors.join("\n"));
+
+  return `<span class="error-chip error-chip--${type}" title="${title}">${escapeHtml(short)}</span>${more}`;
+}
+
+function shortenText(value, maxLength) {
+  const text = String(value);
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength - 1)}…`;
 }
 
 function formatDeliverySummary(delivery = []) {

@@ -30,16 +30,24 @@ class JobRecord:
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: datetime | None = None
     error: str | None = None
+    phase: str | None = None
+    retry_total: int = 0
+    retry_processed: int = 0
+    retry_current_product_id: str | None = None
 
     def to_summary(self) -> dict[str, Any]:
         return {
             "job_id": self.job_id,
             "status": self.status.value,
+            "phase": self.phase,
             "total": len(self.product_ids),
             "processed": self.processed,
             "success_count": self.success_count,
             "partial_count": self.partial_count,
             "failed_count": self.failed_count,
+            "retry_total": self.retry_total,
+            "retry_processed": self.retry_processed,
+            "retry_current_product_id": self.retry_current_product_id,
             "created_at": self.created_at.isoformat(),
             "completed_at": self.completed_at.isoformat() if self.completed_at else None,
             "error": self.error,
@@ -58,6 +66,10 @@ class JobRecord:
             "created_at": self.created_at.isoformat(),
             "completed_at": self.completed_at.isoformat() if self.completed_at else None,
             "error": self.error,
+            "phase": self.phase,
+            "retry_total": self.retry_total,
+            "retry_processed": self.retry_processed,
+            "retry_current_product_id": self.retry_current_product_id,
         }
 
     @classmethod
@@ -85,6 +97,10 @@ class JobRecord:
             created_at=created_at,
             completed_at=completed_at,
             error=payload.get("error"),
+            phase=payload.get("phase"),
+            retry_total=payload.get("retry_total", 0),
+            retry_processed=payload.get("retry_processed", 0),
+            retry_current_product_id=payload.get("retry_current_product_id"),
         )
 
 

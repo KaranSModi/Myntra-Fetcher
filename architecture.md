@@ -105,6 +105,9 @@ Jobs are processed **one product at a time** within a job. Concurrency is applie
 GET /api/v1/jobs/{job_id}
   → returns job summary + accumulated results (grows as job runs)
 
+POST /api/v1/jobs/{job_id}/retry-failed
+  → re-fetch failed/partial products in background; poll for updates
+
 GET /api/v1/jobs/{job_id}/download
   → full JSON attachment once job is completed or failed
 ```
@@ -311,6 +314,7 @@ Reasonable next steps if the system needs to scale or harden:
 | Area | Current | Possible upgrade |
 |------|---------|------------------|
 | Job queue | FastAPI `BackgroundTasks` | Redis + Celery/RQ for long batches |
+| Failed fetch recovery | `POST /jobs/{id}/retry-failed` + unified PDP retries | Automatic second pass with slower rate limits |
 | Persistence | JSON files on disk | PostgreSQL or S3 for multi-instance deploys |
 | Caching | Per-job category slug cache | Redis cache keyed by `product_id` / slug |
 | Testing | Unit tests with fixtures | HTML fixture integration tests against recorded responses |

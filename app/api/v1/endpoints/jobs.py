@@ -67,6 +67,41 @@ async def get_job(job_id: str) -> JobResponse:
     )
 
 
+@router.post("/{job_id}/retry-failed", response_model=JobResponse)
+async def retry_failed_products(
+    job_id: str,
+    background_tasks: BackgroundTasks,
+    include_partial: bool = True,
+) -> JobResponse:
+    """Re-fetch failed (and optionally partial) products for a completed job."""
+    job = job_store.get(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found.")
+    if job.status == JobStatus.RUNNING:
+        raise HTTPException(status_code=409, detail="Job is already running.")
+    if job.status == JobStatus.PENDING:
+        raise HTTPException(status_code=409, detail="Job has not finished its initial run yet.")
+
+    retriable_count = fetch_service.count_retriable_products(job, include_partial=include_partial)
+    if retriable_count == 0:
+        raise HTTPException(
+            status_code=400,
+            detail="No failed or partial products are available to retry.",
+        )
+
+    background_tasks.add_task(fetch_service.retry_failed_products, job_id, include_partial=include_partial)
+
+    return JobResponse(
+        message="Retry started for failed products.",
+        data={"job": job.to_summary()},
+        meta={
+            "poll_url": f"/api/v1/jobs/{job_id}",
+            "retriable_count": retriable_count,
+            "include_partial": include_partial,
+        },
+    )
+
+
 @router.get("/{job_id}/download")
 async def download_job(job_id: str) -> JSONResponse:
     """Download the full job output as JSON."""

@@ -59,6 +59,10 @@ Poll job status and results.
 
 Download completed job output as JSON.
 
+### `POST /api/v1/jobs/{job_id}/retry-failed`
+
+Re-fetch products that failed or were partial in a completed job. Query param `include_partial` (default `true`) controls whether partial results are retried. Returns immediately and processes in the background; poll `GET /api/v1/jobs/{job_id}` for progress.
+
 ## Approach
 
 ### Product pages
@@ -113,9 +117,10 @@ Delivery output includes `serviceable`, `delivery_text`, and `estimated_days` wh
 
 ### Reliability
 
-- Request throttling and retry with backoff
+- Request throttling and retry with backoff (shared for PDP HTML and cookie-based fetches)
 - Limited concurrency (default: 3)
 - Per-product isolation so one failure does not stop the job
+- Retry failed/partial products via `POST /api/v1/jobs/{job_id}/retry-failed`
 - Explicit warnings for missing fields and partial category ad sets
 
 ## Assumptions

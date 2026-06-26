@@ -46,7 +46,8 @@ class MyntraClient:
                 await asyncio.sleep(settings.request_delay_seconds - elapsed)
             self._last_request_at = time.monotonic()
 
-    async def _get_html(self, path: str) -> str:
+    async def _get_response(self, path: str) -> httpx.Response:
+        """GET a Myntra page with throttling, retries, and transient error handling."""
         url = path if path.startswith("http") else f"{settings.myntra_base_url.rstrip('/')}/{path.lstrip('/')}"
         last_error: Exception | None = None
 
@@ -73,15 +74,19 @@ class MyntraClient:
             if response.status_code >= 400:
                 raise MyntraBlockedError(f"Myntra returned status {response.status_code} for {url}")
 
-            return response.text
+            return response
 
         raise last_error or MyntraBlockedError(f"Failed to fetch {url}")
 
-    async def fetch_product(self, product_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
-        """Fetch PDP HTML and return mapped product data plus raw pdpData."""
-        html = await self._get_html(str(product_id))
+    async def _get_html(self, path: str) -> str:
+        return (await self._get_response(path)).text
+
+    def _parse_pdp_response(
+        self, response: httpx.Response, product_id: str
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        """Parse a PDP HTML response into mapped product data and raw pdpData."""
         try:
-            payload = extract_myx_json(html)
+            payload = extract_myx_json(response.text)
         except MyntraParseError as exc:
             raise MyntraNotFoundError(f"Product {product_id} has no parseable PDP data.") from exc
 
@@ -93,6 +98,11 @@ class MyntraClient:
         if product.get("category_slug"):
             product["category_url"] = f"{settings.myntra_base_url}/{product['category_slug']}"
         return product, pdp_data
+
+    async def fetch_product(self, product_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
+        """Fetch PDP HTML and return mapped product data plus raw pdpData."""
+        response = await self._get_response(str(product_id))
+        return self._parse_pdp_response(response, product_id)
 
     async def fetch_category_ads(self, category_slug: str, limit: int = 3) -> list[dict[str, Any]]:
         """Fetch sponsored category ads from a category listing page."""
@@ -188,25 +198,7 @@ class MyntraClient:
     async def fetch_product_with_cookies(
         self, product_id: str
     ) -> tuple[dict[str, Any], dict[str, Any], httpx.Cookies]:
-        """Fetch PDP and retain cookies for follow-up gateway calls."""
-        url = f"{settings.myntra_base_url.rstrip('/')}/{product_id}"
-        await self._throttle()
-        async with httpx.AsyncClient(
-            timeout=settings.request_timeout_seconds,
-            follow_redirects=True,
-        ) as client:
-            response = await client.get(url, headers=self._default_headers())
-            if response.status_code == 404:
-                raise MyntraNotFoundError(f"Product {product_id} not found.")
-            if response.status_code >= 400:
-                raise MyntraBlockedError(f"Myntra returned status {response.status_code}")
-
-            payload = extract_myx_json(response.text)
-            pdp_data = payload.get("pdpData")
-            if not pdp_data:
-                raise MyntraNotFoundError(f"Product {product_id} is unavailable.")
-
-            product = map_pdp_product(pdp_data, product_id)
-            if product.get("category_slug"):
-                product["category_url"] = f"{settings.myntra_base_url}/{product['category_slug']}"
-            return product, pdp_data, response.cookies
+        """Fetch PDP with retries and retain cookies for follow-up gateway calls."""
+        response = await self._get_response(str(product_id))
+        product, pdp_data = self._parse_pdp_response(response, product_id)
+        return product, pdp_data, response.cookies

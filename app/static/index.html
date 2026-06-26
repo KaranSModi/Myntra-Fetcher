@@ -28,17 +28,33 @@
       <div class="status-row">
         <strong>Job status:</strong>
         <span id="job-status">-</span>
+        <span id="job-phase-badge" class="job-phase-badge hidden"></span>
       </div>
-      <div class="progress-wrap">
-        <div id="progress-bar" class="progress-bar"></div>
+      <div id="job-error-banner" class="job-error-banner hidden"></div>
+      <div id="fetch-progress-panel">
+        <p class="progress-label">Initial fetch</p>
+        <div class="progress-wrap">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <p id="progress-text" class="progress-text">0 / 0 processed</p>
       </div>
-      <p id="progress-text" class="progress-text">0 / 0 processed</p>
+      <div id="retry-progress-panel" class="retry-progress-panel hidden">
+        <p class="progress-label">Retry progress</p>
+        <div class="progress-wrap progress-wrap--retry">
+          <div id="retry-progress-bar" class="progress-bar progress-bar--retry"></div>
+        </div>
+        <p id="retry-progress-text" class="progress-text">0 / 0 retried</p>
+        <p id="retry-current-product" class="retry-current-product"></p>
+      </div>
       <div class="summary-grid">
         <div><span>Success</span><strong id="success-count">0</strong></div>
         <div><span>Partial</span><strong id="partial-count">0</strong></div>
         <div><span>Failed</span><strong id="failed-count">0</strong></div>
       </div>
-      <button id="download-btn" class="secondary hidden" type="button">Download JSON</button>
+      <div class="status-actions">
+        <button id="retry-failed-btn" class="secondary hidden" type="button">Retry failed &amp; partial</button>
+        <button id="download-btn" class="secondary hidden" type="button">Download JSON</button>
+      </div>
     </section>
 
     <section class="card history-card">
@@ -57,6 +73,15 @@
     <section class="card">
       <div class="table-header">
         <h2>Results</h2>
+        <div class="results-toolbar">
+          <div class="results-filters">
+            <button type="button" class="filter-btn active" data-filter="all">All</button>
+            <button type="button" class="filter-btn" data-filter="failed">Failed</button>
+            <button type="button" class="filter-btn" data-filter="partial">Partial</button>
+            <button type="button" class="filter-btn" data-filter="issues">Has issues</button>
+          </div>
+          <span id="results-filter-count" class="results-filter-count"></span>
+        </div>
       </div>
       <div class="table-wrap">
         <table>
@@ -64,6 +89,7 @@
             <tr>
               <th>Product ID</th>
               <th>Status</th>
+              <th>Issue</th>
               <th>Title</th>
               <th>Category</th>
               <th>Rating</th>
@@ -73,7 +99,7 @@
             </tr>
           </thead>
           <tbody id="results-body">
-            <tr><td colspan="8" class="empty">Upload a CSV to begin.</td></tr>
+            <tr><td colspan="9" class="empty">Upload a CSV to begin.</td></tr>
           </tbody>
         </table>
       </div>
